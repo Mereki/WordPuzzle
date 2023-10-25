@@ -9,23 +9,43 @@ def get_valid_letters(x):
     return chars
 
 
-#print(get_valid_letters("SAG,SOW | GLOSSY,NSAS  ,EGLS ,EOGT ,OTYY,OSSO,OEA"))
+# print(get_valid_letters("SAG,SOW | GLOSSY,NSAS  ,EGLS ,EOGT ,OTYY,OSSO,OEA"))
+
+# def is_valid_guess(x, y):
+#     checker = ""
+#     if len(y) != 10:
+#         return False
+#     else:
+#         for i in y:
+#             if i not in x:
+#                 return False
+#             elif i in x and i in checker:
+#                 return False
+#             else:
+#                 checker += i
+#     return True
 
 def is_valid_guess(x, y):
-    checker = ""
-    if len(y) != len(x):
+    guess = y
+    valid = x
+    if len(y) != 10:
         return False
     else:
-        for i in y:
-            if i not in x:
-                return False
-            elif i in x and i in checker:
-                return False
-            else:
-                checker += i
-    return True
+        if guess[0] in valid:
+            valid = valid.replace(guess[0], "")
+            guess = guess.replace(guess[0], "")
+            # print(guess)
+            # print(valid)
+            for i in guess:
+                if i in valid:
+                    guess = guess.replace(i, "")
+                    valid = valid.replace(i, "")
+                    if guess == "" and valid == "":
+                        return True
+        return False
 
-#print(type((is_valid_guess("SAGOWLYNET", "SSSSSSSSSSS"))))
+
+# print(((is_valid_guess("RUEAMOSIKT", "TAKEOURSIM"))))
 
 def check_user_guess(a, b, c, d):
     if b * c + d == a:
@@ -90,10 +110,10 @@ def main():
     print_puzzle(puzzle)
     print()
     guess = input("Enter your guess, for example ABCDEFGHIJ: ")
-    # guess = "TAGOWLNYES"
+    # print(guess)
+    # guess = "YESNOWLTAG"
     # guess = "TAKEOURSIM"
     # guess = "OURMISTAKE"
-
     valid_chars = get_valid_letters(puzzle)
     valid_guess = is_valid_guess(valid_chars, guess)
     numbers = make_numbers(puzzle, guess)
@@ -101,10 +121,11 @@ def main():
     # print(numbers)
     checker = check_user_guess(int(numbers[0]), int(numbers[1]), int(numbers[2]), int(numbers[3]))
     # print(checker)
-    if len(guess) != len(valid_chars):
+    if not valid_guess or len(guess) != 10:
         print("Your guess should contain exactly 10 unique letters used in the puzzle.")
-    elif not (valid_guess and checker):
+    elif not checker:
         print("Try again!")
+
     else:
         print("Good job!")
 
